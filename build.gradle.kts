@@ -33,5 +33,11 @@ fun versionBanner(): String = project.providers.exec {
 }.standardOutput.asText.map { it.trim() }.getOrElse("Unknown")
 
 fun builder(): String = project.providers.exec {
-    commandLine("git", "config", "user.name")
+    fun builder(): String = try {
+    project.providers.exec {
+        commandLine("git", "config", "user.name")
+    }.standardOutput.asText.map { it.trim() }.get()
+} catch (e: Exception) {
+    "GitHub-Actions"
+}
 }.standardOutput.asText.map { it.trim() }.getOrElse("Unknown")
